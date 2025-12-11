@@ -43,19 +43,19 @@ def _configure_h264_hardware_encoding():
     
     # Detect available hardware encoders (priority: NVENC > QSV > VideoToolbox)
     hardware_encoders = ['h264_nvenc', 'h264_qsv', 'h264_videotoolbox']
-    for encoder in hardware_encoders:
-        try:
-            test_codec = av.CodecContext.create(encoder, "w")
-            test_codec.width = 640
-            test_codec.height = 480
-            test_codec.pix_fmt = "yuv420p"
-            test_codec.framerate = fractions.Fraction(30, 1)
-            test_codec.time_base = fractions.Fraction(1, 30)
-            _selected_h264_encoder = encoder
-            logger.info(f"Detected H.264 hardware encoder: {encoder}")
-            break
-        except Exception as e:
-            logger.debug(f"Hardware encoder {encoder} not available: {e}")
+    # for encoder in hardware_encoders:
+    #     try:
+    #         test_codec = av.CodecContext.create(encoder, "w")
+    #         test_codec.width = 640
+    #         test_codec.height = 480
+    #         test_codec.pix_fmt = "yuv420p"
+    #         test_codec.framerate = fractions.Fraction(30, 1)
+    #         test_codec.time_base = fractions.Fraction(1, 30)
+    #         _selected_h264_encoder = encoder
+    #         logger.info(f"Detected H.264 hardware encoder: {encoder}")
+    #         break
+    #     except Exception as e:
+    #         logger.debug(f"Hardware encoder {encoder} not available: {e}")
     
     if _selected_h264_encoder == 'libx264':
         logger.warning("No hardware encoder available, will use libx264 (CPU encoding)")
