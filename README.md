@@ -366,6 +366,13 @@ OpenAvatarChat按照配置文件启动并组织各个模块，可以按照选择
 
 推荐安装[uv](https://docs.astral.sh/uv/)，使用uv进行进行本地环境管理。
 
+> 推荐uv国内加速版 (2025-12-10)
+> ```bash
+> # Windows (PowerShell)
+> powershell -ExecutionPolicy Bypass -c "irm https://github.com/Wangnov/uv-custom/releases/download/0.9.17/uv-installer-custom.ps1 | iex"
+> # macOS / Linux
+> curl -LsSf https://github.com/Wangnov/uv-custom/releases/download/0.9.17/uv-installer-custom.sh | sh
+> ```
 > 官方独立安装程序
 > ```bash
 > # On Windows.
@@ -385,6 +392,8 @@ OpenAvatarChat按照配置文件启动并组织各个模块，可以按照选择
 
 ##### 安装全部依赖
 ```bash
+# 需提前修改pyproject.toml: torch==2.4.0, cuda==12.1 (主要是参考MuseTalk中mmcv==2.2.0对应的官方预编译环境)
+
 uv sync --all-packages
 ```
 
@@ -427,6 +436,14 @@ git clone https://github.com/HumanAIGC-Engineering/OpenAvatarChat.git && cd Open
 # 下载所有子模块
 git submodule update --init --recursive --depth 1
 
+# 创建并激活环境
+uv venv --python 3.11
+source .venv/bin/activate
+
+# 安装全部依赖
+uv pip install setuptools pip
+uv sync --all-packages
+
 # 下载LiteAvatar所需模型
 # 脚本默认通过ModelScope下载模型（若本地未安装ModelScope，需先执行pip install modelscope进行安装）
 bash scripts/download_liteavatar_weights.sh
@@ -436,7 +453,7 @@ git clone --depth 1 https://www.modelscope.cn/AI-ModelScope/wav2vec2-base-960h.g
 wget https://virutalbuy-public.oss-cn-hangzhou.aliyuncs.com/share/aigc3d/data/LAM/LAM_audio2exp_streaming.tar -P ./models/LAM_audio2exp/
 tar -xzvf ./models/LAM_audio2exp/LAM_audio2exp_streaming.tar -C ./models/LAM_audio2exp && rm ./models/LAM_audio2exp/LAM_audio2exp_streaming.tar
 
-# 下载MuseTalk所需模型
+# 下载MuseTalk所需模型 (部分修改download_musetalk_weights.sh)
 bash scripts/download_musetalk_weights.sh
 
 # 构建镜像
